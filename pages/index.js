@@ -1,20 +1,31 @@
 import React from 'react'
 import Router from 'next/router'
 import dynamic from 'next/dynamic'
+import { withRouter } from 'next/router'
+
+const is_server = !process.browser;
 
 const DynamicComponent1 = dynamic({
   loader: () => new Promise((resolve) => {
-    console.log(Router);
-    resolve(import('../components/hello2'));
+    setTimeout(() => {
+      resolve(import('../components/hello2'));
+    }, 2000)
   }),
   loading: () => {
+    // if (!is_server) {
     console.log(Router);
-    return <p>Loading caused by client page transition ...</p>;
-  }
+    const { pathname, query, asPath } = Router;
+    return <p>Loading page {pathname} ...</p>;
+    // }
+    // return <p>Loading page ...</p>;
+  },
+  ssr: false
 })
 
-export default class Index extends React.Component {
+class Index extends React.Component {
   render () {
+    const { pathname, query, asPath } = this.props.router
+    console.log(pathname, query, asPath)
     return (
       <div>
         <DynamicComponent1 />
@@ -22,3 +33,5 @@ export default class Index extends React.Component {
     )
   }
 }
+
+export default withRouter(Index);
