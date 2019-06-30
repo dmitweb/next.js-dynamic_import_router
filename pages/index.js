@@ -7,25 +7,21 @@ const is_server = !process.browser;
 
 const DynamicComponent1 = dynamic({
   loader: () => new Promise((resolve) => {
+    console.log('router not available', Router.router)
     setTimeout(() => {
       resolve(import('../components/hello2'));
     }, 2000)
   }),
   loading: () => {
-    // if (!is_server) {
-    console.log(Router);
-    const { pathname, query, asPath } = Router;
-    return <p>Loading page {pathname} ...</p>;
-    // }
-    // return <p>Loading page ...</p>;
+    console.log('router not available', Router.router)
+    return <>loading</>
   },
-  ssr: false
 })
 
 class Index extends React.Component {
   render () {
-    const { pathname, query, asPath } = this.props.router
-    console.log(pathname, query, asPath)
+    // const { pathname, query, asPath } = this.props.router
+    console.log('router is available', Router.router);
     return (
       <div>
         <DynamicComponent1 />
