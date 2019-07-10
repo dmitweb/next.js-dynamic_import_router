@@ -8,9 +8,16 @@ const is_server = !process.browser;
 const DynamicComponent1 = dynamic({
   loader: () => new Promise((resolve) => {
     console.log('router not available', Router.router)
-    setTimeout(() => {
-      resolve(import('../components/hello2'));
-    }, 2000)
+    const query = { component: 'hello1' };
+    if (!is_server) {
+      if (query.component === 'hello1') {
+        console.log('route hello1');
+      }
+      if (query.component === 'hello2') {
+        console.log('route hello2');
+      }
+    }
+    resolve(import('../components/hello2'));
   }),
   loading: () => {
     console.log('router not available', Router.router)
